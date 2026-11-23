@@ -15,12 +15,14 @@ libvirt/KVM, installs nginx with cloud-init, checks it, then destroys it.
 
 ```sh
 ssh-keygen -t ed25519 -N '' -f lab_key        # throwaway key for this lab only
-tofu init                                       # downloads the libvirt provider
+tofu init                                       # downloads the libvirt provider, writes .terraform.lock.hcl
 tofu plan
 tofu apply                                      # type yes; about a minute
 ./verify.sh "$(tofu output -raw vm_ip)"         # ssh, cloud-init, nginx, curl
 tofu test                                       # optional: plan-only checks
 ```
+
+The lock file is not shipped on purpose: you see `tofu init` create it, as in the video. In your own projects, commit `.terraform.lock.hcl`.
 
 ## Clean up
 
