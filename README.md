@@ -19,3 +19,7 @@ Each episode has its own folder. Every folder is self-contained: you can start a
 Every lab names what it creates with its episode prefix (for example `ep01-*`) and removes all of it with `tofu destroy`. Keys and state files are ignored by Git: the state file can hold secrets, so never commit it.
 
 Ubuntu, OpenTofu, Terraform and HashiCorp are trademarks of their respective owners; this project is not affiliated with or endorsed by them.
+
+## Licence
+
+MIT: see [LICENSE](LICENSE).
