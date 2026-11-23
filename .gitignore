@@ -1,0 +1,13 @@
+# Lab keys (generated per run, never commit)
+lab_key
+lab_key.pub
+# OpenTofu working files and state (state can hold secrets)
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+# Disk images
+*.img
+*.qcow2
+*.iso
