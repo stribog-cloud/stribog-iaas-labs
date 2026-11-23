@@ -3,6 +3,13 @@
 Builds one Ubuntu 26.04 VM (2 vCPU, 2 GiB RAM, 10 GiB disk) with OpenTofu and
 libvirt/KVM, installs nginx with cloud-init, checks it, then destroys it.
 
+## First: run the preflight
+After cloning, from this folder:
+```sh
+setup/preflight.sh
+```
+One line per check, `ok` or `FAIL` with the fix. Read-only. Fix every `FAIL` before going on.
+
 ## Prerequisites
 
 - Linux host with KVM and libvirt running (`virsh -c qemu:///system list` works for your user)
