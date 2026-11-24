@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
 # Download the Ubuntu 26.04 cloud image and its checksums
 BASE=https://cloud-images.ubuntu.com/releases/26.04/release
 sudo mkdir -p /var/lib/libvirt/images/base
