@@ -14,6 +14,7 @@ MIN_MEM_GIB=${PREFLIGHT_MIN_MEM_GIB:-4}
 MIN_DISK_GIB=${PREFLIGHT_MIN_DISK_GIB:-15}
 IMAGE=${PREFLIGHT_IMAGE:-/var/lib/libvirt/images/base/ubuntu-26.04-server-cloudimg-amd64.img}
 TOOLS=${PREFLIGHT_TOOLS:-tofu curl ssh ssh-keygen}
+FW_DIRS=${PREFLIGHT_FW_DIRS:-/usr/share/OVMF /usr/share/OVMF/x64 /usr/share/edk2/ovmf /usr/share/edk2/x64 /usr/share/edk2-ovmf/x64 /usr/share/qemu}
 MIN_TOFU=${PREFLIGHT_MIN_TOFU:-1.13}
 
 failed=0
@@ -101,6 +102,22 @@ elif [ -n "$tofu_ver" ] && [ "$(printf '%s\n%s\n' "$MIN_TOFU" "$tofu_ver" | sort
   row tools FAIL "tofu $tofu_ver is older than $MIN_TOFU" "install a newer OpenTofu: setup/01-install-opentofu.sh"
 else
   row tools ok "tofu ${tofu_ver:-?}, curl, ssh, ssh-keygen"
+fi
+
+# firmware: main.tf boots with firmware = "efi", so libvirt needs an OVMF/edk2 x86_64 code file
+fw=""
+for f in ${PREFLIGHT_FW_JSON-/usr/share/qemu/firmware/*.json /etc/qemu/firmware/*.json}; do
+  [ -r "$f" ] && grep -q '"x86_64"' "$f" && grep -Eqi 'ovmf|edk2' "$f" && { fw=$f; break; }
+done
+if [ -z "$fw" ]; then
+  for d in $FW_DIRS; do
+    for f in "$d"/OVMF_CODE*; do [ -r "$f" ] && { fw=$f; break 2; }; done
+  done
+fi
+if [ -n "$fw" ]; then
+  row firmware ok "UEFI firmware (OVMF/edk2, x86_64) is installed"
+else
+  row firmware FAIL "no OVMF/edk2 x86_64 firmware found" "install ovmf (Debian/Ubuntu) or edk2-ovmf (Fedora)"
 fi
 
 # image: checksum against Ubuntu's SHA256SUMS, kept next to the image
