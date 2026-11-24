@@ -17,6 +17,9 @@ One line per check, `ok` or `FAIL` with the fix. Read-only. Fix every `FAIL` bef
 - An Ubuntu 26.04 cloud image on the host. Set `base_image` in `variables.tf`
   (or `-var base_image=...`) to its path.
 - libvirt's `default` NAT network and `default` storage pool, both active
+- UEFI firmware for QEMU (`ovmf` on Debian/Ubuntu, `edk2-ovmf` on Fedora): the VM boots with `firmware = "efi"`
+
+`setup/02-install-libvirt.sh` installs the libvirt side of this; `setup/preflight.sh` checks it.
 
 ## Run it
 
